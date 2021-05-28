@@ -58,7 +58,7 @@ const pacientes = [
 console.log(analizarPacientes(pacientes));
 
 function analizarPacientes(personas) {
-  const MayoresEdad = (acumulador, persona) =>
+  const mayoresEdad = (acumulador, persona) =>
     persona.paciente.edad >= 18 ? ++acumulador : acumulador;
 
   const contarHombresDiabeticos = (persona) =>
@@ -67,22 +67,19 @@ function analizarPacientes(personas) {
   const sumaDiasIngresados = (diasAcumulados, persona) =>
     diasAcumulados + persona.diasIngresado;
 
-  const calcularMediaEdadMujeres = (
-    edadAcumulada,
-    persona,
-    posicion,
-    personas
-  ) =>
-    persona.paciente.sexo === "M"
-      ? edadAcumulada + persona.paciente.edad / personas.length
-      : edadAcumulada;
+  const calcularMediaEdadMujeres = (edadAcumulada, persona, i, personasArray) =>
+    edadAcumulada + persona.paciente.edad / personasArray.length;
+
+  const sacarMujeres = (persona) => persona.paciente.sexo === "M";
 
   const datosHospital = {
     nPacientes: personas.length,
-    nMayoresEdad: personas.reduce(MayoresEdad, 0),
+    nMayoresEdad: personas.reduce(mayoresEdad, 0),
     nHombresDiabeticos: personas.filter(contarHombresDiabeticos).length,
     totalDiasIngreso: personas.reduce(sumaDiasIngresados, 0),
-    mediaEdadMujeres: personas.reduce(calcularMediaEdadMujeres, 0),
+    mediaEdadMujeres: personas
+      .filter(sacarMujeres)
+      .reduce(calcularMediaEdadMujeres, 0),
   };
 
   return datosHospital;
